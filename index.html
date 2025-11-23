@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无需付费也能称霸游戏；开局送神装，升级快到上天；随时随地挂机一刀999级，装备全靠爆，这游戏3分钟上瘾。</title>
+    <style>
+        /* 1. 网页基础样式：纯黑背景、无默认边距 */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* 黑色背景 */
+            overflow: hidden; /* 隐藏滚动条，避免视频缩放留白 */
+        }
+
+        /* 2. 视频样式：全屏自适应+隐藏控件 */
+        #fullscreenVideo {
+            position: fixed; /* 固定定位，占满整个视口 */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100vw; /* 宽度=视口宽度 */
+            height: 100vh; /* 高度=视口高度 */
+            object-fit: cover; /* 保持视频比例，填满窗口（无拉伸/黑边） */
+            z-index: 1; /* 视频在底层，不遮挡提示 */
+        }
+        /* 隐藏视频原生控件（兼容多浏览器） */
+        #fullscreenVideo::-webkit-media-controls { display: none !important; }
+        #fullscreenVideo::-moz-media-controls { display: none !important; }
+        #fullscreenVideo::-ms-media-controls { display: none !important; }
+        #fullscreenVideo { appearance: none; -webkit-appearance: none; }
+
+        /* 3. 单独音频样式：隐藏控件（仅后台播放） */
+        #backgroundAudio {
+            display: none; /* 完全隐藏音频标签（无需视觉显示） */
+        }
+        /* 兜底隐藏音频控件（部分浏览器可能显示） */
+        #backgroundAudio::-webkit-media-controls { display: none !important; }
+
+        /* 4. 自动播放失败提示（用户交互引导） */
+        #playPrompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            z-index: 10; /* 提示在最上层 */
+            display: none; /* 默认隐藏，失败时显示 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 视频标签：全屏+自动播放（初始静音） -->
+    <a  href="https://lanyue.tanwan.com/" target="_blank" title="无需付费也能称霸游戏；开局送神装，升级快到上天；随时随地挂机一刀999级，装备全靠爆，这游戏3分钟上瘾。"><video 
+        id="fullscreenVideo" 
+        autoplay 
+        muted 
+        playsinline 
+        preload="auto" 
+        loop
+    >
+        <source src="your-video.mp4" type="video/mp4">
+        <source src="your-video.webm" type="video/webm">
+        您的浏览器不支持HTML5视频，请升级浏览器。
+    </video></a>
+
+    <!-- 单独音频标签：自动播放（初始静音）+隐藏 -->
+    <audio 
+        id="backgroundAudio" 
+        autoplay 
+        preload="auto" 
+        loop
+    >
+        <source src="your-audio.mp3" type="audio/mpeg">
+        <source src="your-audio.ogg" type="audio/ogg">
+        您的浏览器不支持HTML5音频，请升级浏览器。
+    </audio>
+
+    <!-- 自动播放失败提示（点击后解锁音视频声音） -->
+    <div id="playPrompt">点击任意位置解锁音视频声音</div>
+
+    <script>
+        // 获取音视频元素和提示
+        const video = document.getElementById('fullscreenVideo');
+        const audio = document.getElementById('backgroundAudio');
+        const prompt = document.getElementById('playPrompt');
+
+        // 尝试自动加载音视频（初始静音，符合浏览器策略）
+        Promise.all([video.play(), audio.play()])
+            .catch(() => {
+                // 若加载失败（极少数浏览器限制），显示点击提示
+                prompt.style.display = 'block';
+            });
+
+        // 点击网页任意位置：解锁音视频声音+确保播放+隐藏提示
+        document.addEventListener('click', async () => {
+            // 1. 取消音视频静音
+            //video.muted = false;
+            audio.muted = false;
+
+            // 2. 确保音视频正常播放（防止暂停状态）
+            await Promise.all([video.play(), audio.play()]);
+
+            // 3. 隐藏提示
+            prompt.style.display = 'none';
+        });
+
+        // 窗口缩放时：视频自动适配（CSS的vw/vh已处理，无需额外JS）
+    </script>
+</body>
+</html>
